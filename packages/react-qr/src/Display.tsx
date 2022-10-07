@@ -1,9 +1,10 @@
-// Copyright 2017-2021 @polkadot/react-qr authors & contributors
+// Copyright 2017-2022 @polkadot/react-qr authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
 
+import { objectSpread } from '@polkadot/util';
 import { xxhashAsHex } from '@polkadot/util-crypto';
 
 import { qrcode } from './qrcode';
@@ -14,6 +15,7 @@ interface Props {
   size?: string | number;
   skipEncoding?: boolean;
   style?: React.CSSProperties;
+  timerDelay?: number;
   value: Uint8Array;
 }
 
@@ -29,7 +31,7 @@ interface TimerState {
   timerId: number | null;
 }
 
-const FRAME_DELAY = 2500;
+const DEFAULT_FRAME_DELAY = 2750;
 const TIMER_INC = 500;
 
 function getDataUrl (value: Uint8Array): string {
@@ -37,16 +39,15 @@ function getDataUrl (value: Uint8Array): string {
 
   // HACK See our qrcode stringToBytes override as used internally. This
   // will only work for the case where we actually pass `Bytes` in here
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  qr.addData(value as any, 'Byte');
+  qr.addData(value as unknown as string, 'Byte');
   qr.make();
 
   return qr.createDataURL(16, 0);
 }
 
-function Display ({ className, size, skipEncoding, style, value }: Props): React.ReactElement<Props> | null {
+function Display ({ className, size, skipEncoding, style, timerDelay = DEFAULT_FRAME_DELAY, value }: Props): React.ReactElement<Props> | null {
   const [{ image }, setFrameState] = useState<FrameState>({ frameIdx: 0, frames: [], image: null, valueHash: null });
-  const timerRef = useRef<TimerState>({ timerDelay: FRAME_DELAY, timerId: null });
+  const timerRef = useRef<TimerState>({ timerDelay, timerId: null });
 
   const containerStyle = useMemo(
     () => createImgSize(size),
@@ -69,19 +70,21 @@ function Display ({ className, size, skipEncoding, style, value }: Props): React
         timerRef.current.timerDelay = timerRef.current.timerDelay + TIMER_INC;
       }
 
-      timerRef.current.timerId = setTimeout(nextFrame, timerRef.current.timerDelay);
-
       // only encode the frames on demand, not above as part of the
       // state derivation - in the case of large payloads, this should
       // be slightly more responsive on initial load
-      return {
-        ...state,
+      const newState = objectSpread<FrameState>({}, state, {
         frameIdx,
         image: getDataUrl(state.frames[frameIdx])
-      };
+      });
+
+      // set the new timer last
+      timerRef.current.timerId = setTimeout(nextFrame, timerRef.current.timerDelay);
+
+      return newState;
     });
 
-    timerRef.current.timerId = window.setTimeout(nextFrame, FRAME_DELAY);
+    timerRef.current.timerId = window.setTimeout(nextFrame, timerRef.current.timerDelay);
 
     return (): void => {
       // eslint-disable-next-line react-hooks/exhaustive-deps

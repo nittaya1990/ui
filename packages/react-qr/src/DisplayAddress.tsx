@@ -1,4 +1,4 @@
-// Copyright 2017-2021 @polkadot/react-qr authors & contributors
+// Copyright 2017-2022 @polkadot/react-qr authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 import React, { useMemo } from 'react';
@@ -12,9 +12,10 @@ interface Props {
   className?: string;
   size?: string | number;
   style?: React.CSSProperties;
+  timerDelay?: number;
 }
 
-function DisplayAddress ({ address, className, genesisHash, size, style }: Props): React.ReactElement<Props> | null {
+function DisplayAddress ({ address, className, genesisHash, size, style, timerDelay }: Props): React.ReactElement<Props> | null {
   const data = useMemo(
     () => createAddressPayload(address, genesisHash),
     [address, genesisHash]
@@ -30,6 +31,7 @@ function DisplayAddress ({ address, className, genesisHash, size, style }: Props
       size={size}
       skipEncoding
       style={style}
+      timerDelay={timerDelay}
       value={data}
     />
   );

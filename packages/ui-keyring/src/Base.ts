@@ -1,4 +1,4 @@
-// Copyright 2017-2021 @polkadot/ui-keyring authors & contributors
+// Copyright 2017-2022 @polkadot/ui-keyring authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 import type { KeyringInstance, KeyringPair } from '@polkadot/keyring/types';
@@ -27,6 +27,8 @@ export class Base {
   protected _store: KeyringStore;
 
   protected _genesisHash?: string;
+
+  protected _genesisHashAdd: string[] = [];
 
   constructor () {
     this.#accounts = accounts;
@@ -59,13 +61,19 @@ export class Base {
     return this._genesisHash;
   }
 
+  public get genesisHashes (): string[] {
+    return this._genesisHash
+      ? [this._genesisHash, ...this._genesisHashAdd]
+      : [...this._genesisHashAdd];
+  }
+
   public decodeAddress = (key: string | Uint8Array, ignoreChecksum?: boolean, ss58Format?: Prefix): Uint8Array => {
     return this.keyring.decodeAddress(key, ignoreChecksum, ss58Format);
-  }
+  };
 
   public encodeAddress = (key: string | Uint8Array, ss58Format?: Prefix): string => {
     return this.keyring.encodeAddress(key, ss58Format);
-  }
+  };
 
   public getPair (address: string | Uint8Array): KeyringPair {
     return this.keyring.getPair(address);
@@ -115,6 +123,7 @@ export class Base {
         ? options.genesisHash.toString()
         : options.genesisHash.toHex()
     );
+    this._genesisHashAdd = options.genesisHashAdd || [];
     this._store = options.store || this._store;
 
     this.addAccountPairs();

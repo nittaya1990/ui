@@ -1,8 +1,8 @@
-// Copyright 2017-2021 @polkadot/ui-keyring authors & contributors
+// Copyright 2017-2022 @polkadot/ui-keyring authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type BN from 'bn.js';
 import type { KeyringPair, KeyringPair$Json, KeyringPair$Meta } from '@polkadot/keyring/types';
+import type { BN } from '@polkadot/util';
 import type { EncryptedJson } from '@polkadot/util-crypto/json/types';
 import type { KeypairType } from '@polkadot/util-crypto/types';
 import type { AddressSubject, SingleAddress } from './observable/types';
@@ -10,7 +10,7 @@ import type { CreateResult, KeyringAddress, KeyringAddressType, KeyringItemType,
 
 import { createPair } from '@polkadot/keyring';
 import { chains } from '@polkadot/ui-settings';
-import { bnToBn, hexToU8a, isHex, isString, stringToU8a, u8aSorted, u8aToString } from '@polkadot/util';
+import { bnToBn, hexToU8a, isFunction, isHex, isString, objectSpread, stringify, stringToU8a, u8aSorted, u8aToString } from '@polkadot/util';
 import { base64Decode, createKeyMulti, jsonDecrypt, jsonEncrypt } from '@polkadot/util-crypto';
 
 import { env } from './observable/env';
@@ -33,7 +33,7 @@ export class Keyring extends Base implements KeyringStruct {
   };
 
   public addExternal (address: string | Uint8Array, meta: KeyringPair$Meta = {}): CreateResult {
-    const pair = this.keyring.addFromAddress(address, { ...meta, isExternal: true }, null);
+    const pair = this.keyring.addFromAddress(address, objectSpread<KeyringJson$Meta>({}, meta, { isExternal: true }), null);
 
     return {
       json: this.saveAccount(pair),
@@ -42,7 +42,7 @@ export class Keyring extends Base implements KeyringStruct {
   }
 
   public addHardware (address: string | Uint8Array, hardwareType: string, meta: KeyringPair$Meta = {}): CreateResult {
-    return this.addExternal(address, { ...meta, hardwareType, isHardware: true });
+    return this.addExternal(address, objectSpread<KeyringPair$Meta>({}, meta, { hardwareType, isHardware: true }));
   }
 
   public addMultisig (addresses: (string | Uint8Array)[], threshold: bigint | BN | number, meta: KeyringPair$Meta = {}): CreateResult {
@@ -51,7 +51,7 @@ export class Keyring extends Base implements KeyringStruct {
     // we could use `sortAddresses`, but rather use internal encode/decode so we are 100%
     const who = u8aSorted(addresses.map((who) => this.decodeAddress(who))).map((who) => this.encodeAddress(who));
 
-    return this.addExternal(address, { ...meta, isMultisig: true, threshold: bnToBn(threshold).toNumber(), who });
+    return this.addExternal(address, objectSpread<KeyringPair$Meta>({}, meta, { isMultisig: true, threshold: bnToBn(threshold).toNumber(), who }));
   }
 
   public addPair (pair: KeyringPair, password: string): CreateResult {
@@ -91,17 +91,20 @@ export class Keyring extends Base implements KeyringStruct {
 
     const accounts = await Promise.all(accountPromises);
 
-    return {
-      ...jsonEncrypt(stringToU8a(JSON.stringify(accounts)), ['batch-pkcs8'], password),
+    return objectSpread({}, jsonEncrypt(stringToU8a(JSON.stringify(accounts)), ['batch-pkcs8'], password), {
       accounts: accounts.map((account) => ({
         address: account.address,
         meta: account.meta
       }))
-    };
+    });
   }
 
   public createFromJson (json: KeyringPair$Json, meta: KeyringPair$Meta = {}): KeyringPair {
-    return this.keyring.createFromJson({ ...json, meta: { ...(json.meta || {}), meta } });
+    return this.keyring.createFromJson(
+      objectSpread({}, json, {
+        meta: objectSpread({}, json.meta, meta)
+      })
+    );
   }
 
   public createFromUri (suri: string, meta: KeyringPair$Meta = {}, type?: KeypairType): KeyringPair {
@@ -182,7 +185,7 @@ export class Keyring extends Base implements KeyringStruct {
       .filter(([, { json: { meta: { contract } } }]): boolean =>
         !!contract && contract.genesisHash === this.genesisHash
       )
-      .map(([address]): KeyringAddress => this.getContract(address) as KeyringAddress);
+      .map(([address]) => this.getContract(address) as KeyringAddress);
   }
 
   private rewriteKey (json: KeyringJson, key: string, hexAddr: string, creator: (addr: string) => string): void {
@@ -196,7 +199,6 @@ export class Keyring extends Base implements KeyringStruct {
 
   private loadAccount (json: KeyringJson, key: string): void {
     if (!json.meta.isTesting && (json as KeyringPair$Json).encoded) {
-      // FIXME Just for the transition period (ignoreChecksum)
       const pair = this.keyring.addFromJson(json as KeyringPair$Json, true);
 
       this.accounts.add(this._store, pair.address, json, pair.type);
@@ -249,10 +251,7 @@ export class Keyring extends Base implements KeyringStruct {
   private loadInjected (address: string, meta: KeyringJson$Meta, type?: KeypairType): void {
     const json = {
       address,
-      meta: {
-        ...meta,
-        isInjected: true
-      }
+      meta: objectSpread<KeyringJson$Meta>({}, meta, { isInjected: true })
     };
     const pair = this.keyring.addFromAddress(address, json.meta, null, type);
 
@@ -266,7 +265,7 @@ export class Keyring extends Base implements KeyringStruct {
       ) || [this.genesisHash];
 
       if (json.meta.genesisHash) {
-        return hashes.includes(json.meta.genesisHash);
+        return hashes.includes(json.meta.genesisHash) || this.genesisHashes.includes(json.meta.genesisHash);
       } else if (json.meta.contract) {
         return hashes.includes(json.meta.contract.genesisHash);
       }
@@ -279,7 +278,7 @@ export class Keyring extends Base implements KeyringStruct {
     super.initKeyring(options);
 
     this._store.all((key: string, json: KeyringJson): void => {
-      if (options.filter ? options.filter(json) : true) {
+      if (!isFunction(options.filter) || options.filter(json)) {
         try {
           if (this.allowGenesis(json)) {
             if (accountRegex.test(key)) {
@@ -291,7 +290,7 @@ export class Keyring extends Base implements KeyringStruct {
             }
           }
         } catch (error) {
-          // ignore
+          console.warn(`Keyring: Unable to load ${key}:${stringify(json)}`);
         }
       }
     });
@@ -301,7 +300,7 @@ export class Keyring extends Base implements KeyringStruct {
         try {
           this.loadInjected(account.address, account.meta, account.type);
         } catch (error) {
-          // ignore
+          console.warn(`Keyring: Unable to inject ${stringify(account)}`);
         }
       }
     });

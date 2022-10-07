@@ -1,4 +1,4 @@
-// Copyright 2017-2021 @polkadot/ui authors & contributors
+// Copyright 2017-2022 @polkadot/ui authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 const config = require('@polkadot/dev/config/jest.cjs');
@@ -12,5 +12,6 @@ module.exports = {
     '\\.(css|less)$': 'empty/object',
     '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$': 'empty/object'
   },
+  setupFilesAfterEnv: ['<rootDir>/jest/setupEnv.js'],
   testEnvironment: 'jsdom'
 };

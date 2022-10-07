@@ -1,5 +1,357 @@
 # CHANGELOG
 
+## 2.9.11 Oct 7, 2022
+
+Changes:
+
+- Bump to `@polkadot/util` 10.1.10
+
+
+## 2.9.10 Sep 24, 2022
+
+Changes:
+
+- Bump to `@polkadot/util` 10.1.9
+
+
+## 2.9.9 Sep 17, 2022
+
+Changes:
+
+- Bump to `@polkadot/util` 10.1.8
+
+
+## 2.9.8 Sep 2, 2022
+
+Changes:
+
+- Bump to `@polkadot/util` 10.1.7
+
+
+## 2.9.7 Aug 24, 2022
+
+Changes:
+
+- Bump to `@polkadot/util` 10.1.6
+
+
+## 2.9.6 Aug 21, 2022
+
+Changes:
+
+- Use webpack packages from `@polkadot/dev`
+- Bump to `@polkadot/util` 10.1.5
+
+
+## 2.9.5 Aug 13, 2022
+
+Changes:
+
+- Bump to `@polkadot/util` 10.1.4
+
+
+## 2.9.4 Aug 6, 2022
+
+Changes:
+
+- Bump to `@polkadot/util` 10.1.3
+
+
+## 2.9.3 Jul 30, 2022
+
+Changes:
+
+- Bump to `@polkadot/util` 10.1.2
+
+
+## 2.9.2 Jul 24, 2022
+
+Contributed:
+
+- Adjust vue-identicon with no props/data duplication (Thanks to https://github.com/vikiival)
+
+
+## 2.9.1 Jul 21, 2022
+
+Changes:
+
+- Bump to `@polkadot/util` 10.1.1
+
+
+## 2.8.2 Jul 10, 2022
+
+Changes:
+
+- Bump to `@polkadot/util` 10.0.2
+
+
+## 2.8.1 Jul 9, 2022
+
+Changes:
+
+- Bump to `@polkadot/util` 10.0.1
+
+
+## 2.7.2 Jul 4, 2022
+
+Changes:
+
+- Bump to `@polkadot/util-crypto` 9.7.2 (w/ `@polkadot/wasm-crypto` 6.2.2)
+
+
+## 2.7.1 Jul 1, 2022
+
+Contributed:
+
+- Remove extra div wrappers in `vue-identicon` (Thanks to https://github.com/dcolley)
+
+Changes:
+
+- Upgrade to `@polkadot/{hw-ledger, keyring, util, util-crypto}` 9.7.1
+
+
+## 2.6.2 Jun 25, 2022
+
+Changes:
+
+- Upgrade to `@polkadot/{hw-ledger, keyring, util, util-crypto}` 9.6.2
+
+
+## 2.6.1 Jun 23, 2022
+
+Changes:
+
+- Upgrade to `@polkadot/{hw-ledger, keyring, util, util-crypto}` 9.6.1
+- Upgrade libs to latest stable versions
+
+
+## 2.5.1 Jun 19, 2022
+
+Changes:
+
+- Upgrade to `@polkadot/{hw-ledger, keyring, util, util-crypto}` 9.5.1
+- Upgrade libs to latest stable versions
+
+
+## 2.4.1 Jun 4, 2022
+
+Changes:
+
+- Upgrade to `@polkadot/{hw-ledger, keyring, util, util-crypto}` 9.4.1
+
+
+## 2.3.1 May 30, 2022
+
+Changes:
+
+- Upgrade to `@polkadot/{hw-ledger, keyring, util, util-crypto}` 9.3.1
+
+
+## 2.2.1 May 14, 2022
+
+Changes:
+
+- Upgrade to `@polkadot/{hw-ledger, keyring, util, util-crypto}` 9.2.1
+
+
+## 2.1.1 Apr 30, 2022
+
+Changes:
+
+- Upgrade to `@polkadot/{hw-ledger, keyring, util, util-crypto}` 9.1.1
+- Adjust Jest test init for latest `@polkadot/dev`
+
+
+## 2.0.1 Apr 9, 2022
+
+- **Breaking change** In this major version the commonjs outputs are moved to a sub-folder. Since the export map and main field in package.json does reflect this change, there should be no usage changes. However the packages here will all need to be on the same version for internal linkage.
+
+Changes:
+
+- Adjust Polkadot icon generation with lazy init
+- Output commonjs files under the `cjs/**` root
+- Upgrade to `@polkadot/{hw-ledger, keyring, util, util-crypto}` 9.0.1
+
+
+## 1.4.1 Mar 27, 2022
+
+Changes:
+
+- Updated to `@polkadot/{hw-ledger, keyring, util, util-crypto}` 8.7.1
+
+
+## 1.3.1 Mar 19, 2022
+
+Changes:
+
+- Updated to `@polkadot/{hw-ledger, keyring, util, util-crypto}` 8.6.1
+- Additional workaround for Vite bundling
+
+
+## 1.2.1 Mar 12, 2022
+
+Changes:
+
+- Adjust for bundlers where `import.meta.url` is undefined
+- Updated to `@polkadot/{hw-ledger, keyring, util, util-crypto}` 8.5.1
+
+
+## 1.1.1 Feb 14, 2022
+
+Changes:
+
+- Adjust ordering in state & timeouts for QR display
+- Add `timerDelay` property to QR display to control frame timeouts
+- Adjust webpack example config (cleanups, remove unneeded plugins)
+- Updated to `@polkadot/{hw-ledger, keyring, util, util-crypto}` 8.4.1
+
+
+## 1.0.1 Jan 29, 2022
+
+**Breaking change** The `Ledger` export from `@polkadot/ui-keyring` has been removed. For users of this class, import it directly from `@polkadot/hw-ledger`
+
+**Important** This is the first release in the long-outstanding `1.x` range. Apart from the notable breaking changes, it has no functional differences to the previous versions.
+
+Changes:
+
+- Remove `Ledger` export in `ui-keyring`
+
+
+## 0.89.3 Jan 23, 2022
+
+Changes:
+
+- Updated to `@polkadot/{hw-ledger, keyring, util, util-crypto}` 8.3.3
+
+
+## 0.89.2 Jan 15, 2022
+
+Changes:
+
+- Updated to `@polkadot/{hw-ledger, keyring, util, util-crypto}` 8.3.2
+
+
+## 0.89.1 Jan 9, 2022
+
+Changes:
+
+- Updated to `@polkadot/{hw-ledger, keyring, util, util-crypto}` 8.3.1
+
+
+## 0.88.1 Jan 2, 2022
+
+- Allow for loading of accounts on additional genesisHashes
+- Ensure package path is availble under ESM & CJS
+
+
+## 0.87.7 Dec 27, 2021
+
+Changes:
+
+- Internal dev packages bumps, publish changes
+
+
+## 0.87.6 Dec 19, 2021
+
+Changes:
+
+- Updated to `@polkadot/{hw-ledger, keyring, util, util-crypto}` 8.2.2
+
+
+## 0.87.5 Dec 5, 2021
+
+Changes:
+
+- Updated to `@polkadot/{hw-ledger, keyring, util, util-crypto}` 8.1.2
+
+
+## 0.87.4 Dec 5, 2021
+
+Changes:
+
+- Updated to `@polkadot/{hw-ledger, keyring, util, util-crypto}` 8.1.1
+
+
+## 0.87.3 Dec 1, 2021
+
+Changes:
+
+- Use `hasProcess` check from `@polkadot/util`
+- Updated to `@polkadot/{hw-ledger, keyring, util, util-crypto}` 8.0.5
+
+
+## 0.87.2 Nov 30, 2021
+
+Contributed:
+
+- Correct check for `process` variable (Thanks to https://github.com/AndreiEres)
+
+Changes:
+
+- Updated to `@polkadot/{hw-ledger, keyring, util, util-crypto}` 8.0.4
+
+
+## 0.87.1 Nov 28, 2021
+
+Changes:
+
+- Updated to `@polkadot/{hw-ledger, keyring, util, util-crypto}` 8.0.2
+
+
+## 0.86.7 Nov 22, 2021
+
+Changes:
+
+- Updated to `@polkadot/{hw-ledger, keyring, util, util-crypto}` 7.9.2
+
+
+## 0.86.6 Nov 21, 2021
+
+Changes:
+
+- Updated to `@polkadot/{hw-ledger, keyring, util, util-crypto}` 7.9.1
+
+
+## 0.86.5 Nov 6, 2021
+
+Changes:
+
+- Updated to `@polkadot/{hw-ledger, keyring, util, util-crypto}` 7.8.2
+
+
+## 0.86.4 Nov 6, 2021
+
+Changes:
+
+- Updated to `@polkadot/{hw-ledger, keyring, util, util-crypto}` 7.8.1
+
+
+## 0.86.3 Nov 1, 2021
+
+Changes:
+
+- Add publish skip to all examples
+- Updated to `@polkadot/{hw-ledger, keyring, util, util-crypto}` 7.7.1
+
+
+## 0.86.2 Oct 24, 2021
+
+Changes:
+
+- Updated to `@polkadot/{hw-ledger, keyring, util, util-crypto}` 7.6.1
+
+
+## 0.86.1 Oct 16, 2021
+
+Contributed:
+
+- Check for existence of `process` before using (Thanks to https://github.com/wirednkod)
+
+Changes:
+
+- Updated to `@polkadot/{hw-ledger, keyring, util, util-crypto}` 7.5.1
+
+
 ## 0.85.5 Oct 10, 2021
 
 Changes:

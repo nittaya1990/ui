@@ -1,50 +1,54 @@
 {
-  "repository": "https://github.com/polkadot-js/ui",
   "author": "Jaco Greeff <jacogr@gmail.com>",
-  "license": "Apache-2",
+  "bugs": "https://github.com/polkadot-js/ui/issues",
+  "homepage": "https://github.com/polkadot-js/ui#readme",
+  "license": "Apache-2.0",
+  "packageManager": "yarn@3.2.0",
   "private": true,
-  "homepage": ".",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/polkadot-js/ui.git"
+  },
+  "sideEffects": false,
+  "type": "module",
+  "version": "2.9.11",
+  "versions": {
+    "git": "2.9.11",
+    "npm": "2.9.11"
+  },
   "workspaces": [
     "packages/*"
   ],
-  "resolutions": {
-    "typescript": "^4.4.3"
-  },
   "scripts": {
     "build": "polkadot-dev-build-ts",
     "build:release": "polkadot-ci-ghact-build",
     "build:rollup": "polkadot-exec-rollup --config",
-    "lint": "polkadot-dev-run-lint",
     "clean": "polkadot-dev-clean-build",
-    "demo:identicon:react": "yarn build && webpack-serve --config packages/react-identicon/webpack.config.js --content packages/react-identicon --port 8080",
-    "demo:identicon:vue": "yarn build && webpack-serve --config packages/vue-identicon/webpack.config.js --content packages/vue-identicon --port 8080",
-    "example:rn:packager": "yarn build && cd packages/exampleReactNative && yarn copy-workspace-packages && yarn start",
-    "example:rn:ios": "cd packages/exampleReactNative && cd ios && pod install && cd .. && yarn ios",
-    "example:rn:android": "cd packages/exampleReactNative && yarn android",
-    "example:react": "yarn build && cd packages/example-react && webpack --config webpack.config.js",
-    "example:vue": "yarn build && cd packages/example-vue && webpack --config webpack.config.js",
+    "example:react": "yarn build && cd packages/example-react && yarn polkadot-exec-webpack --config webpack.config.cjs",
+    "example:vue": "yarn build && cd packages/example-vue && yarn polkadot-exec-webpack --config webpack.config.cjs",
+    "lint": "polkadot-dev-run-lint",
     "postinstall": "polkadot-dev-yarn-only",
     "test": "polkadot-dev-run-test --coverage --runInBand",
     "test:one": "polkadot-dev-run-test"
   },
   "devDependencies": {
-    "@babel/core": "^7.15.8",
-    "@babel/runtime": "^7.15.4",
-    "@polkadot/dev": "^0.62.70",
-    "@polkadot/ts": "^0.4.8",
-    "@polkadot/x-bundle": "^7.4.1",
-    "@types/jest": "^27.0.2",
+    "@babel/core": "^7.19.3",
+    "@babel/runtime": "^7.19.0",
+    "@polkadot/dev": "^0.67.138",
+    "@polkadot/x-bundle": "^10.1.10",
+    "@types/jest": "^29.1.2",
+    "babel-loader": "^8.2.5",
     "babel-plugin-transform-vue-template": "^0.4.2",
     "empty": "^0.10.1",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-is": "^17.0.2",
-    "react-native": "^0.66.0",
-    "vue-template-compiler": "^2.6.14",
-    "webpack": "^4.46.0",
-    "webpack-cli": "^3.3.12",
-    "webpack-serve": "^3.2.0"
+    "process": "^0.11.10",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-is": "^18.2.0",
+    "react-native": "^0.70.2",
+    "stream-browserify": "^3.0.0",
+    "vue-template-compiler": "^2.7.10"
   },
-  "version": "0.85.5",
-  "packageManager": "yarn@3.0.1"
+  "resolutions": {
+    "typescript": "^4.8.4"
+  }
 }
